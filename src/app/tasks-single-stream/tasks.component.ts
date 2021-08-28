@@ -5,7 +5,7 @@ import { TasksFilterService } from './tasks-filter.service';
 import { TasksService } from './tasks.service';
 
 @Component({
-  selector: 'app-tasks-with-issue',
+  selector: 'app-tasks-single-stream',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: ` {{ areTasksValid$ | async }} `
 })
@@ -17,7 +17,7 @@ export class TasksComponent {
 
     this.tasksFilterService.setTasksFilterPattern('code');
     setTimeout(() => {
-      this.tasksService.setTasks(['write text', 'write code']);
+      this.tasksService.setTasks(['write text', 'write text']);
     }, 2000);
   }
 

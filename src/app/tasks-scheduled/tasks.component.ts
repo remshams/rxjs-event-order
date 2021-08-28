@@ -7,23 +7,17 @@ import { TasksService } from './tasks.service';
 @Component({
   selector: 'app-tasks-scheduled',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: ` {{ areTasksValid$ | async }} `,
+  template: ` {{ areTasksValid$ | async }} `
 })
 export class TasksComponent {
   readonly areTasksValid$: Observable<boolean>;
 
-  constructor(
-    private tasksService: TasksService,
-    private tasksFilterService: TasksFilterService
-  ) {
-    this.areTasksValid$ = this.setupAreTasksValid(
-      tasksService.tasks$,
-      tasksFilterService.tasksFilterPattern$
-    );
+  constructor(private tasksService: TasksService, private tasksFilterService: TasksFilterService) {
+    this.areTasksValid$ = this.setupAreTasksValid(tasksService.tasks$, tasksFilterService.tasksFilterPattern$);
 
     this.tasksFilterService.setTasksFilterPattern('code');
     setTimeout(() => {
-      this.tasksService.setTasks(['write code', 'other']);
+      this.tasksService.setTasks(['write text', 'write code']);
     }, 2000);
   }
 
@@ -33,17 +27,9 @@ export class TasksComponent {
   ): Observable<boolean> {
     return tasks$.pipe(
       withLatestFrom(tasksFilterPattern$),
-      tap((values) =>
-        console.log(
-          values,
-          `AppComponent: Check if tasks are valid for pattern`
-        )
-      ),
+      tap(values => console.log(values, `AppComponent: Check if tasks are valid for pattern`)),
       map(([tasks, tasksFilterPattern]) =>
-        tasks.reduce(
-          (isValid, task) => isValid && task.includes(tasksFilterPattern),
-          true as boolean
-        )
+        tasks.reduce((isValid, task) => isValid && task.includes(tasksFilterPattern), true as boolean)
       )
     );
   }
