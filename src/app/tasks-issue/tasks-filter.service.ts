@@ -7,8 +7,8 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
+import { isEqualArray } from '../utils/primitives';
 import { TasksService } from './tasks.service';
-import { isEqualArray } from './utils/primitives';
 
 @Injectable({
   providedIn: 'root',
