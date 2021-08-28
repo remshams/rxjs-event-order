@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, withLatestFrom } from 'rxjs/operators';
-import { PostsFilterService } from './posts-filter.service';
-import { PostsService } from './posts.service';
+import { TasksFilterService } from './tasks-filter.service';
+import { TasksService } from './tasks.service';
 
 @Component({
   selector: 'app-root',
@@ -10,32 +10,38 @@ import { PostsService } from './posts.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  readonly areSelectedPostsValid$: Observable<boolean>;
+  readonly areTasksValid$: Observable<boolean>;
 
   constructor(
-    public postsService: PostsService,
-    private postFilterService: PostsFilterService
+    private tasksService: TasksService,
+    private tasksFilterService: TasksFilterService
   ) {
-    this.areSelectedPostsValid$ = this.setupAreSelectedPostsValid(
-      this.postsService.selectedPosts$,
-      this.postFilterService.filterPattern$
+    this.areTasksValid$ = this.setupAreTasksValid(
+      tasksService.tasks$,
+      tasksFilterService.tasksFilterPattern$
     );
-    this.postFilterService.setFilterPattern('test');
+
+    this.tasksFilterService.setTasksFilterPattern('code');
     setTimeout(() => {
-      this.postsService.selectPosts(['test', 'other']);
+      this.tasksService.setTasks(['write code', 'other']);
     }, 2000);
   }
 
-  setupAreSelectedPostsValid(
-    selectedPosts: Observable<Array<string>>,
-    filterPattern$: Observable<string>
+  private setupAreTasksValid(
+    tasks$: Observable<Array<string>>,
+    tasksFilterPattern$: Observable<string>
   ): Observable<boolean> {
-    return selectedPosts.pipe(
-      tap((posts) => console.log(posts)),
-      withLatestFrom(filterPattern$),
-      map(([selectedPosts, filterPattern]) =>
-        selectedPosts.reduce(
-          (isValid, post) => isValid && post.includes(filterPattern),
+    return tasks$.pipe(
+      withLatestFrom(tasksFilterPattern$),
+      tap((values) =>
+        console.log(
+          values,
+          `AppComponent: Check if tasks are valid for pattern`
+        )
+      ),
+      map(([tasks, tasksFilterPattern]) =>
+        tasks.reduce(
+          (isValid, task) => isValid && task.includes(tasksFilterPattern),
           true as boolean
         )
       )
