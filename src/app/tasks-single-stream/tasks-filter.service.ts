@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Injectable()
 export class TasksFilterService {
-  private readonly tasksFilterPattern = new BehaviorSubject('');
+  private readonly tasksFilterPattern = new ReplaySubject<string>(1);
 
   readonly tasksFilterPattern$: Observable<string>;
 

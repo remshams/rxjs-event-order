@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { asapScheduler, BehaviorSubject, Observable, ReplaySubject, scheduled } from 'rxjs';
+import { asapScheduler, Observable, ReplaySubject, scheduled } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { isEqualArray } from '../utils/primitives';
 import { TasksService } from './tasks.service';
@@ -7,7 +7,7 @@ import { TasksService } from './tasks.service';
 @Injectable()
 export class TasksFilterService implements OnDestroy {
   private readonly destroy = new ReplaySubject<void>(1);
-  private readonly tasksFilterPattern = new BehaviorSubject('');
+  private readonly tasksFilterPattern = new ReplaySubject<string>(1);
 
   readonly tasksFilterPattern$: Observable<string>;
 

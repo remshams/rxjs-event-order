@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 import { TasksFilterService } from './tasks-filter.service';
 
 @Injectable()
 export class TasksService {
-  private readonly tasks = new BehaviorSubject<Array<string>>([]);
+  private readonly tasks = new ReplaySubject<Array<string>>(1);
 
   readonly tasks$: Observable<Array<string>>;
 
